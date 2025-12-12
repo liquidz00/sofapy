@@ -1,11 +1,14 @@
-from sofapy.main import parse_sofa_feed
+"""Tests for SOFA feed parsing functionality."""
+
+from sofapy.client import _SofaClientBase
 from sofapy.models import SOFAFeed
 
 
 def test_parse_sofa_feed_complete(sofa_feed_response) -> None:
     """Test parsing a complete SOFA feed."""
+    client = _SofaClientBase()
     feed_data = sofa_feed_response
-    sofa_feed = parse_sofa_feed(feed_data)
+    sofa_feed = client._parse_feed(feed_data)
 
     assert isinstance(sofa_feed, SOFAFeed)
     assert sofa_feed.update_hash == feed_data["UpdateHash"]
@@ -22,8 +25,9 @@ def test_parse_sofa_feed_complete(sofa_feed_response) -> None:
 
 def test_parse_sofa_feed_with_cves(feed_with_critical_cves) -> None:
     """Test parsing SOFA feed with CVE data."""
+    client = _SofaClientBase()
     feed_data = feed_with_critical_cves
-    sofa_feed = parse_sofa_feed(feed_data)
+    sofa_feed = client._parse_feed(feed_data)
 
     # Check we have the version with CVEs
     os_version = sofa_feed.os_versions.get("14.0")
@@ -40,8 +44,9 @@ def test_parse_sofa_feed_with_cves(feed_with_critical_cves) -> None:
 
 def test_parse_empty_sofa_feed(empty_sofa_feed) -> None:
     """Test parsing an empty SOFA feed."""
+    client = _SofaClientBase()
     feed_data = empty_sofa_feed
-    sofa_feed = parse_sofa_feed(feed_data)
+    sofa_feed = client._parse_feed(feed_data)
 
     assert isinstance(sofa_feed, SOFAFeed)
     assert len(sofa_feed.os_versions) == 0
