@@ -1,0 +1,41 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+permissions: read-all
+
+jobs:
+  run-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
+    name: Run unit Tests
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244  # v7.1.4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python with UV
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Lint and format
+        run: make lint
+
+      - name: Run Tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: make test-cov
