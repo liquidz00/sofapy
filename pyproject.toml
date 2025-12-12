@@ -1,0 +1,93 @@
+[project]
+name = "sofapy"
+dynamic = ["readme", "version"]
+description = "A python wrapper of MacAdmins SOFA (sofa.macadmins.io)"
+keywords = ["SOFA", "MacAdmins", "CVE", "macOS"]
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [
+  {name = "Andrew Lerman", email = "info@liquidzoo.io"}
+]
+dependencies = [
+    "asyncclick>=8.3.0.7",
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+]
+
+[project.urls]
+Repository = "https://github.com/liquidz00/sofapy"
+Issues = "https://github.com/liquidz00/sofapy/issues/new"
+
+[project.scripts]
+sofapy = "sofapy.cli:cli"
+
+[project.optional-dependencies]
+dev = [
+    "faker>=38.2.0",
+    "pre-commit>=4.5.0",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.9",
+]
+
+[build-system]
+requires = [
+  "setuptools >= 61",
+  "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "sofapy.__version__" }
+readme = { file = ["README.md"], content-type = "text/markdown" }
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint]
+select = [
+  "E101",
+  "F401",
+  "F403",
+  "I001",
+  "N801",
+  "N802",
+  "N806"
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+minversion = "6.0"
+addopts = [
+  "--durations=5",
+  "--color=yes",
+  "--cov=src",
+  "--cov-report=html:coverage/htmlcov",
+  "--cov-report=term-missing",
+]
+testpaths = ["./tests"]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+  "ignore::RuntimeWarning",
+]
+
+[tool.coverage.run]
+omit = ["tests/*"]
