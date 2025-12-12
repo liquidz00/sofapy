@@ -36,7 +36,7 @@ jobs:
       - name: Read release version
         id: read_version
         run: |
-          VERSION=$(uv run python -c 'from from sofapy import __version__; print(__version__)')
+          VERSION=$(uv run python -c 'from sofapy import __version__; print(__version__)')
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "Building version: ${VERSION}"
 
