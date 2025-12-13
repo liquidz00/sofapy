@@ -1,4 +1,6 @@
-# sofapy
+# SOFApy
+
+![](https://img.shields.io/badge/Python-3.12+-3776AB.svg?style=flat&logo=python&logoColor=white)&nbsp;![](https://img.shields.io/github/v/release/liquidz00/sofapy?color=orange)&nbsp;![](https://github.com/liquidz00/sofapy/actions/workflows/run-tests.yml/badge.svg)&nbsp;![](https://img.shields.io/pypi/v/sofapy?color=yellow)&nbsp;![](https://img.shields.io/badge/macOS-10.13%2B-blueviolet?logo=apple&logoSize=auto)
 
 A Python client library for the [MacAdmins SOFA](https://sofa.macadmins.io) (Simple Organized Feed for Apple) API.
 
