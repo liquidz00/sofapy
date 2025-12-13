@@ -58,6 +58,18 @@ def test_sofa_log_creates_parent_directories(tmp_path: Path) -> None:
     assert logfile.parent.exists()
 
 
+def test_setup_logger_without_logfile() -> None:
+    """Test setup_logger works without a logfile configured."""
+    sofa_log = SofaLog()  # No logfile
+
+    # Should not raise TypeError
+    logger = sofa_log.setup_logger(debug=True)
+
+    assert isinstance(logger, logging.Logger)
+    assert sofa_log._logger is logger
+    assert sofa_log._debug_mode is True
+
+
 def test_setup_logger_returns_logger(tmp_path: Path) -> None:
     """Test setup_logger returns a logger instance."""
     logfile = tmp_path / "test.log"
