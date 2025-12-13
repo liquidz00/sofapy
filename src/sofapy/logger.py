@@ -10,15 +10,11 @@ import asyncclick as click
 
 
 class SofaLog:
-    LOGGER_NAME = "sofapy"
-    MAX_BYTES = 1048576 * 100  # 100 MB
-    BACKUP_COUNT = 10
-
     def __init__(
         self,
-        logger_name: str | None = LOGGER_NAME,
-        max_bytes: int | None = MAX_BYTES,
-        backup_count: int | None = BACKUP_COUNT,
+        logger_name: str | None = "sofapy",
+        max_bytes: int | None = 1048576 * 100,  # 100 MB
+        backup_count: int | None = 10,
         logfile: str | Path | None = None,
     ) -> None:
         self.logger_name = logger_name
@@ -62,16 +58,19 @@ class SofaLog:
         logger = logging.getLogger(logger_name)
 
         if not logger.hasHandlers():
-            file_handler = RotatingFileHandler(
-                self.logfile,
-                maxBytes=self.max_bytes,
-                backupCount=self.backup_count,
-            )
-            file_handler.setFormatter(
-                logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-            )
-            file_handler.setLevel(level)
-            logger.addHandler(file_handler)
+            # Only add file handler if logfile is configured
+            if self.logfile:
+                file_handler = RotatingFileHandler(
+                    self.logfile,
+                    maxBytes=self.max_bytes,
+                    backupCount=self.backup_count,
+                )
+                file_handler.setFormatter(
+                    logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+                )
+                file_handler.setLevel(level)
+                logger.addHandler(file_handler)
+
             logger.setLevel(logging.DEBUG)  # Capture all messages, delegate to handlers
 
         self._logger = logger
